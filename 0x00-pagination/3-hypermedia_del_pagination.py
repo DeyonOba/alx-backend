@@ -53,7 +53,58 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+    def get_hyper_index(
+        self, index: int = None, page_size: int = 10
+    ) -> Dict[str, int]:
+        """
+        Self updates users page content even when some indexes
+        has been deleted.
+
+        Args:
+            index (int, optional): Current start index. Defaults to None.
+            page_size (int, optional): page content size. Defaults to 10.
+
+        Returns:
+            Dict[str, int]: Returns content based on the start index, if
+            the start index is not found then return the next index with the
+            same amount of page content.
+
+        ALGORITHM
+        ---------
+
+        1. Check if the `index` still contains the default argument None, if
+        yes raise an AssertionError. You can also return an empty dictionary.
+        2. Retrieve and store the indexed dataset with the variable name
+        `indexed_dataset`.
+        3. Get the list of indexes from the indexed dataset using the
+        dictionary `keys` method.
+        4. Verify that the index passed in as an argument falls into the range
+        of the minimum index and the maximum index.
+        5. Create an empty list with the variable name `page_data`, this would
+        store the contents of the page requested for by the user.
+        6. Set the `index` as the `current_index`, this might change if the
+        index pass upon method call is not found within the `indexed_dataset`.
+        7. Create a variable `count` that is assigned 0 at the begining of the
+        loop. This `count` variable would act as a control flow/ control
+        logic that enables
+        the while loop to end if the required page content has be retrieved.
+        8. Because the database might be update at each page call,
+        we would need to find the start index of each page content call,
+        using the variable `found_start_index` we can easily find the
+        first index that meet the condition in code line 123.
+        9. Using the dictionary method `.items()` we get the key and value pair
+        within a tuple.
+        10. If the content count is equal to page size do this:
+            i. Save the next_index using the key(i.e. idx).
+            ii. End the for loop.
+        11. If the current loop key value is equal to or greater than the index
+        argument then:
+            i. Check if the starting index has been found, if it has continue,
+            if it has not then update the current index to the key value,
+            and assign `found_start_index` to be true.
+        12. Update the page content add count.
+        13. Finally add the retrieved data to `page_data`.
+        """
         assert index
         indexed_dataset = self.indexed_dataset()
         indexes = indexed_dataset.keys()
