@@ -110,11 +110,14 @@ class LFUCache(BaseCaching):
         """
         Finds the key or keys with the least frequency.
         """
-        min_frequency = min(
-            self.cache_frequency,
-            key=self.cache_frequency.get
-        )
+        min_frequency = min(self.cache_frequency.values())
+
+        min_keys = [
+            key
+            for key, value in self.cache_frequency.items()
+            if value == min_frequency
+            ]
 
         for key in self.cache_history:
-            if key == min_frequency:
+            if key in min_keys:
                 return key
