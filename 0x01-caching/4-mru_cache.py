@@ -36,8 +36,7 @@ class MRUCache(BaseCaching):
     def put(self, key, item):
         """
         Assigns to dictionary `self.cache_data` the item value for the
-        key `key`. If number of items in `self.cache_data`, then discard
-        the first item put into the dictionary using the FIFO principle.
+        key `key`.
         """
         if key and item:
             if key not in self.cache_history:
@@ -54,6 +53,7 @@ class MRUCache(BaseCaching):
 
         if item is None:
             return None
+        # Update the most recently used key in `self.cache_history`
         self.cache_hit(key)
         return item
 
