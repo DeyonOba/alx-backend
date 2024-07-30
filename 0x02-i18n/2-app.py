@@ -34,6 +34,10 @@ babel = Babel(app)
 
 @babel.localeselector
 def get_locale():
+    """
+    Uses the decorator `babel.localeselector` to find the best match
+    for the supported languages English and Franch.
+    """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
